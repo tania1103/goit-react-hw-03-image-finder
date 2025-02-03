@@ -1,33 +1,64 @@
-import React from 'react';
-import { Profile } from './Profile/Profile';
-import user from '../user.json';
-import { Statistics } from './Statistics/Statistics';
-import data from '../data.json';
-import { FriendList } from './FriendList/FriendList';
-import friends from '../friends.json';
-import { TransactionHistory } from './TransactionHistory/TransactionHistory';
-import transactions from '../transactions.json';
 
-export const App = () => {
-  return (
-    <div>
-      {/*Profile */}
-      <Profile
-        username={user.username}
-        tag={user.tag}
-        location={user.location}
-        avatar={user.avatar}
-        stats={user.stats}
-      />
+import { Component } from 'react';
+import { AppWrap } from './App.styled';
+import { ToastContainer } from 'react-toastify';
+import Searchbar from './Searchbar';
+import Modal from './Modal';
+import Button from './Button';
+import ImageGallery from './ImageGallery';
+import Loader from './Loader';
+import Error from './Error';
 
-      {/* Statistics */}
-      <Statistics title="Upload stats" stats={data} />
+export class App extends Component {
+  state = {
+    search: '',
+    loading: false,
+    currentPage: 1,
+    totalPage: null,
+    error: null,
+    images: [],
+    selectedImageIndex: null,
+  };
 
-      {/* FriendLIST*/}
-      <FriendList friends={friends} />
+  changeStateCallback = stateCallback => {
+    this.setState(prevState => stateCallback(prevState));
+  };
 
-      {/* Transactions*/}
-      <TransactionHistory items={transactions} />
-    </div>
-  );
-};
+  render() {
+    const {
+      images,
+      loading,
+      selectedImageIndex,
+      search,
+      currentPage,
+      totalPage,
+      error,
+    } = this.state;
+    const { changeStateCallback } = this;
+    return (
+      <AppWrap>
+        <Searchbar onSubmit={changeStateCallback} />
+        {error && <Error message={error.message} />}
+        <ImageGallery
+          changeStateCallback={changeStateCallback}
+          search={search}
+          page={currentPage}
+          images={images}
+          loading={loading}
+        />
+        {loading && <Loader />}
+        {totalPage > currentPage && (
+          <Button onClick={changeStateCallback}>Load More</Button>
+        )}
+        {(selectedImageIndex !== null) && (
+  <Modal
+    onClose={changeStateCallback}
+    imgInd={selectedImageIndex}
+    images={images}
+  />
+)}
+        <ToastContainer autoClose={2000} />
+      </AppWrap>
+    );
+  }
+}
