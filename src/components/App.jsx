@@ -1,4 +1,3 @@
-
 import { Component } from 'react';
 import { AppWrap } from './App.styled';
 import { ToastContainer } from 'react-toastify';
@@ -50,13 +49,13 @@ export class App extends Component {
         {totalPage > currentPage && (
           <Button onClick={changeStateCallback}>Load More</Button>
         )}
-        {(selectedImageIndex !== null) && (
-  <Modal
-    onClose={changeStateCallback}
-    imgInd={selectedImageIndex}
-    images={images}
-  />
-)}
+        {(selectedImageIndex || selectedImageIndex === 0) && (
+          <Modal
+            onClose={changeStateCallback}
+            imgInd={selectedImageIndex}
+            images={images}
+          />
+        )}
         <ToastContainer autoClose={2000} />
       </AppWrap>
     );

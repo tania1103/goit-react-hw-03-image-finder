@@ -1,44 +1,39 @@
-import { Component } from "react";
-import { createPortal } from "react-dom";
-import PropTypes from "prop-types";
-import { Overlay, ModalContainer } from "./Modal.styled";
+import { Overlay, ModalContainer } from './Modal.styled';
+import { Component } from 'react';
+import { createPortal } from 'react-dom';
+import PropTypes from 'prop-types';
 
-const modalRoot = document.getElementById("modal-root");
+const modalRoot = document.querySelector('#modal-root');
 
-class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener("keydown", this.handleKeyDown);
+export default class Modal extends Component {
+  static propTypes = {
+    onClose: PropTypes.func.isRequired,
+    imgInd: PropTypes.number.isRequired,
+    images: PropTypes.array.isRequired,
+  };
+
+  componentDidMount(e) {
+    window.addEventListener('keydown', this.handleClose);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("keydown", this.handleKeyDown);
+    window.removeEventListener('keydown', this.handleClose);
   }
 
-  handleKeyDown = (event) => {
-    if (event.key === "Escape") {
-      this.closeModal();
+  handleClose = e => {
+    if (e.type === 'keydown' && e.code !== 'Escape') {
+      return;
     }
-  };
 
-  handleClose = (event) => {
-    if (event.target === event.currentTarget) {
-      this.closeModal();
+    if (e.type === 'click' && e.currentTarget !== e.target) {
+      return;
     }
-  };
 
-  closeModal = () => {
-    this.props.onClose(prevState => ({
-      ...prevState,
-      selectedImageIndex: null, // 🔹 Închide modalul corect
-    }));
+    this.props.onClose(prevState => ({ selectedImageIndex: null }));
   };
 
   render() {
-    const { images, imgInd } = this.props;
-    const activeImg = images?.[imgInd];
-
-    if (!modalRoot || !activeImg) return null;
-
+    const activeImg = this.props.images[`${this.props.imgInd}`];
     return createPortal(
       <Overlay onClick={this.handleClose}>
         <ModalContainer>
@@ -49,11 +44,3 @@ class Modal extends Component {
     );
   }
 }
-
-Modal.propTypes = {
-  images: PropTypes.array.isRequired,
-  imgInd: PropTypes.number.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
-
-export default Modal;

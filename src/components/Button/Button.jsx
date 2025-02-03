@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
 import { Component } from 'react';
-import { ButtonLoadMore } from './Button.styled'; // ✅ Import corect
+import PropTypes from 'prop-types';
+import { ButtonLoadMore } from './Button.styled';
 
 class Button extends Component {
   static propTypes = {
@@ -15,7 +15,7 @@ class Button extends Component {
 
   render() {
     return (
-      <ButtonLoadMore type="button" onClick={this.handleClick}> {/* ✅ Folosește direct styled-component */}
+      <ButtonLoadMore type="button" onClick={this.handleClick}>
         Load More
       </ButtonLoadMore>
     );

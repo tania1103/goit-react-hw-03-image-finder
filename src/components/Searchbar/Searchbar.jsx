@@ -1,7 +1,14 @@
-import { Component } from 'react';
+import {
+  Header,
+  SearchForm,
+  Button,
+  BtnLabel,
+  Input,
+} from './Searchbar.styled';
 import { BsSearch } from 'react-icons/bs';
+import { Component } from 'react';
 import { toast } from 'react-toastify';
-import { Header, SearchForm, Button, BtnLabel, Input } from './Searchbar.styled'; // ✅ Import corect
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class Searchbar extends Component {
   state = {
@@ -36,10 +43,11 @@ export default class Searchbar extends Component {
             <BsSearch />
             <BtnLabel>Search</BtnLabel>
           </Button>
+
           <Input
             type="text"
             value={this.state.search}
-            autoComplete="off"
+            autocomplete="off"
             autoFocus
             placeholder="Search images and photos"
             onChange={this.handleSearchChange}
